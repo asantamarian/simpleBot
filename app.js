@@ -1,10 +1,6 @@
-// initialize everything, web server, socket.io, filesystem, johnny-five
-var app = require('http').createServer(handler)
-    , io = require('socket.io').listen(app)
-    , fs = require('fs')
-    , five = require("johnny-five"),
+var five = require("johnny-five"),
     board,led;
-
+ 
 board = new five.Board();
 
 // on board ready
@@ -17,23 +13,35 @@ board.on("ready", function() {
 });
 
 // make web server listen on port 80
-app.listen(3000);
+var express = require('express');
+var app = express();
 
+app.get('/', function(req , res){
+    res.send('public');
+});
 
-// handle web server
-function handler (req, res) {
-    fs.readFile(__dirname + '/index.html',
-        function (err, data) {
-            if (err) {
-                res.writeHead(500);
-                return res.end('Error loading index.html');
-            }
+app.use('/public',express.static('public'));
+app.get('/ledDelay', function(req, res){
+     var delay = req.query.delay;
+     if(board.isReady){
+            led.strobe(delay);
+        }
+     res.send('led delay set to ' + req.query.delay);
 
-            res.writeHead(200);
-            res.end(data);
-        });
-}
+});
 
+app.get('/ledOff', function(req, res){
+     if(board.isReady){
+            led.stop();
+            led.off();
+            console.log('ledOff');
+        }
+     res.send("led Off");
+
+});
+var port = Number(process.env.PORT || 3000);
+app.listen(port);
+/*
 
 // on a socket connection
 io.sockets.on('connection', function (socket) {
@@ -53,4 +61,4 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-});
+});*/

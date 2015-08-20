@@ -1,11 +1,13 @@
 {
-  "name": "node-arduino-test",
+  "name": "simpleBot",
   "version": "0.0.1",
   "description": "Testing node, web sockets, johnny-five, arduino",
-  "main": "webtest.js",
+  "main": "app.js",
   "dependencies": {
-    "socket.io": "latest",
-    "johnny-five": "latest"
+    "johnny-five": "latest",
+    "bootstrap":"latest",
+    "jquery":"latest",
+    "express":"latest"
   },
   "devDependencies": {},
   "scripts": {
